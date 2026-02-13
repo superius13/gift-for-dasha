@@ -82,23 +82,10 @@
       }, 2500);
     }
 
-    letterHeart.addEventListener('dblclick', function (e) {
+    letterHeart.addEventListener('click', function (e) {
       e.preventDefault();
       showEaster();
     });
-
-    var longPressTimer;
-    letterHeart.addEventListener('touchstart', function (e) {
-      longPressTimer = setTimeout(function () {
-        showEaster();
-      }, 500);
-    }, { passive: true });
-    letterHeart.addEventListener('touchend', function () {
-      clearTimeout(longPressTimer);
-    }, { passive: true });
-    letterHeart.addEventListener('touchcancel', function () {
-      clearTimeout(longPressTimer);
-    }, { passive: true });
   }
 
   // Рисуем сердечки на фоне (позиции в JS — тогда все точно видны)
@@ -126,7 +113,7 @@
       placeholder.innerHTML = '';
       placeholder.appendChild(img);
     };
-    img.alt = 'Love is... делать уютные селфи вдвоём';
+    img.alt = 'Love is...';
     img.src = 'photo.png';
   }
 })();

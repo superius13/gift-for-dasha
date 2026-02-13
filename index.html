@@ -32,14 +32,14 @@
       <p class="step-2-text">Точно хочешь открыть?</p>
       <div class="step-2-gifs">
         <button type="button" class="gif-btn gif-yes" data-next="3" aria-label="Да">
-          <video src="sticker-yes.webm" class="step-gif" autoplay loop muted playsinline></video>
+          <video src="sticker-yes.webm" class="step-gif" autoplay loop muted playsinline preload="auto"></video>
         </button>
         <button type="button" class="gif-btn gif-no" data-show="no-reaction" aria-label="Нет">
-          <video src="sticker-no.webm" class="step-gif" autoplay loop muted playsinline></video>
+          <video src="sticker-no.webm" class="step-gif" autoplay loop muted playsinline preload="auto"></video>
         </button>
       </div>
       <div class="step-2-no-reaction is-hidden" id="no-reaction" aria-hidden="true">
-        <video src="sticker-3.webm" class="step-gif step-gif--reaction" autoplay loop muted playsinline></video>
+        <video src="sticker-3.webm" class="step-gif step-gif--reaction" autoplay loop muted playsinline preload="auto"></video>
         <button type="button" class="btn-try-again" id="btn-try-again">Попробовать ещё</button>
       </div>
     </div>
