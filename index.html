@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Для моей Дашеньки 💕</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#c97b84">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main class="page">
+    <!-- Шаг 1: закрытый конверт -->
+    <div class="step step-1 is-visible" data-step="1">
+      <div class="closed-envelope" aria-hidden="true">
+        <div class="closed-envelope-body"></div>
+        <div class="closed-envelope-flap"></div>
+      </div>
+      <p class="step-1-text">Привет, Дашик — у меня для тебя небольшое послание (^_^)</p>
+      <button type="button" class="btn-next" data-next="2">Хочу посмотреть</button>
+    </div>
+
+    <!-- Шаг 2: точно хочешь открыть? ДА / НЕТ -->
+    <div class="step step-2" data-step="2">
+      <p class="step-2-text">Точно хочешь открыть?</p>
+      <div class="step-2-gifs">
+        <button type="button" class="gif-btn gif-yes" data-next="3" aria-label="Да">
+          <video src="sticker-yes.webm" class="step-gif" autoplay loop muted playsinline></video>
+        </button>
+        <button type="button" class="gif-btn gif-no" data-show="no-reaction" aria-label="Нет">
+          <video src="sticker-no.webm" class="step-gif" autoplay loop muted playsinline></video>
+        </button>
+      </div>
+      <div class="step-2-no-reaction is-hidden" id="no-reaction" aria-hidden="true">
+        <video src="sticker-3.webm" class="step-gif step-gif--reaction" autoplay loop muted playsinline></video>
+        <button type="button" class="btn-try-again" id="btn-try-again">Попробовать ещё</button>
+      </div>
+    </div>
+
+    <!-- Шаг 3: открытое письмо -->
+    <div class="step step-3" data-step="3">
+    <div class="envelope">
+      <div class="envelope-flap"></div>
+      <div class="letter">
+        <header class="letter-header">
+          <span class="label">Для тебя, Дашуль</span>
+          <h1>Привет, родная</h1>
+        </header>
+
+        <div class="photo-placeholder">
+          <p>Здесь должно быть наше фото</p>
+        </div>
+
+        <section class="message">
+          <p>
+            Я сделал для тебя эту страничку — маленький подарок, который всегда будет в интернете.
+          </p>
+          <p>
+            Ты делаешь каждый мой день теплее. Спасибо, что ты есть.
+          </p>
+          <p class="signature">Целую. С любовью, твой Женя</p>
+          <p class="signature-date">14 февраля 2026</p>
+        </section>
+
+        <footer class="letter-footer">
+          <span class="heart heart--easter" id="letter-heart" role="img" aria-label="сердце">♥</span>
+          <span class="heart-easter-popup is-hidden" id="heart-easter-popup" aria-hidden="true">Люблю тебя</span>
+          <p class="letter-opens" id="letter-opens" aria-live="polite"></p>
+        </footer>
+      </div>
+    </div>
+      <p class="letter-back-wrap">
+        <button type="button" class="btn-back" id="btn-back-to-envelope">Свернуть в конверт</button>
+      </p>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

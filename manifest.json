@@ -1,0 +1,17 @@
+{
+  "name": "Для моей Дашеньки",
+  "short_name": "Для Дашули",
+  "description": "Письмо для тебя",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fdf8f3",
+  "theme_color": "#c97b84",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
