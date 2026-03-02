@@ -1,7 +1,59 @@
 (function () {
   'use strict';
 
+  // =====================================================
+  // АВТОМАТИЧЕСКОЕ ПЕРЕКЛЮЧЕНИЕ ТЕМ ПО ДАТЕ
+  // =====================================================
+  var THEMES = {
+    march8: {
+      // Активна с 6 по 10 марта
+      isActive: function () {
+        var now = new Date();
+        var m = now.getMonth() + 1;
+        var d = now.getDate();
+        return m === 3 && d >= 8 && d <= 10;
+      },
+      floatSymbols: ['🌸', '🌷', '🌼', '🌺', '✿'],
+      floatCount: 50,
+      apply: function () {
+        document.documentElement.classList.add('theme-march8');
+        var step1Text = document.querySelector('.step-1-text');
+        if (step1Text) step1Text.textContent = 'С 8 марта, Дашуль! У меня для тебя кое-что есть 🌸';
+        var header = document.querySelector('.letter-header');
+        if (header) {
+          var badge = document.createElement('div');
+          badge.className = 'spring-badge';
+          badge.textContent = '🌸 8 марта 🌸';
+          header.insertBefore(badge, header.firstChild);
+        }
+        var label = document.querySelector('.label');
+        if (label) label.textContent = 'С праздником, Дашуль';
+        var message = document.querySelector('.message');
+        if (message) {
+          var greeting = document.createElement('p');
+          greeting.textContent = 'Сегодня 8 марта - и я хочу, чтобы ты знала: ты самое прекрасное, что есть в моей жизни.';
+          message.insertBefore(greeting, message.firstChild);
+        }
+        var sig = document.querySelector('.signature');
+        if (sig) sig.textContent = 'Целую. С любовью, твой Женя 🌷';
+        var sigDate = document.querySelector('.signature-date');
+        if (sigDate) sigDate.textContent = '8 марта 2026';
+        var easter = document.getElementById('heart-easter-popup');
+        if (easter) easter.textContent = 'С 8 марта, родная 🌸';
+      }
+    }
+  };
+
+  // Применяем активную тему (если есть)
+  var activeTheme = null;
+  Object.keys(THEMES).forEach(function (key) {
+    if (THEMES[key].isActive()) activeTheme = THEMES[key];
+  });
+  if (activeTheme) activeTheme.apply();
+
+  // =====================================================
   // Переключение шагов (кнопка «Хочу посмотреть» и гифка «Да»)
+  // =====================================================
   var STORAGE_KEY = 'gift-letter-opens';
 
   function goToStep(nextStep) {
@@ -18,7 +70,24 @@
           var word = (n % 10 === 1 && n % 100 !== 11) ? 'раз' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 'раза' : 'раз';
           el.textContent = 'Ты открыла это письмо ' + n + ' ' + word;
         }
+        if (activeTheme) launchConfetti();
       }
+    }
+  }
+
+  function launchConfetti() {
+    var petals = ['🌸', '🌷', '🌼', '🌺', '✿'];
+    for (var i = 0; i < 32; i++) {
+      (function () {
+        var petal = document.createElement('span');
+        petal.className = 'confetti-petal';
+        petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+        petal.style.left = (Math.random() * 100) + 'vw';
+        petal.style.animationDelay = (Math.random() * 1.8) + 's';
+        petal.style.fontSize = (0.7 + Math.random() * 0.9) + 'rem';
+        document.body.appendChild(petal);
+        setTimeout(function () { petal.remove(); }, 5500);
+      })();
     }
   }
 
@@ -88,14 +157,15 @@
     });
   }
 
-  // Рисуем сердечки на фоне (позиции в JS — тогда все точно видны)
+  // Рисуем символы на фоне (сердечки или цветочки — зависит от темы)
   var container = document.querySelector('.hearts');
   if (container) {
-    var count = 28;
+    var symbols = (activeTheme && activeTheme.floatSymbols) ? activeTheme.floatSymbols : ['♥'];
+    var count = (activeTheme && activeTheme.floatCount) ? activeTheme.floatCount : 28;
     for (var i = 0; i < count; i++) {
       var heart = document.createElement('span');
       heart.className = 'heart-float';
-      heart.textContent = '♥';
+      heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       heart.style.left = Math.random() * 100 + '%';
       heart.style.top = Math.random() * 100 + '%';
       heart.style.animationDelay = (Math.random() * 5) + 's';
