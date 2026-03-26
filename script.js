@@ -70,13 +70,13 @@
           var word = (n % 10 === 1 && n % 100 !== 11) ? 'раз' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 'раза' : 'раз';
           el.textContent = 'Ты открыла это письмо ' + n + ' ' + word;
         }
-        if (activeTheme) launchConfetti();
+        launchConfetti();
       }
     }
   }
 
   function launchConfetti() {
-    var petals = ['🌸', '🌷', '🌼', '🌺', '✿'];
+    var petals = (activeTheme && activeTheme.floatSymbols) ? activeTheme.floatSymbols : ['🌿', '🍃', '🌼', '☀️', '🦋'];
     for (var i = 0; i < 32; i++) {
       (function () {
         var petal = document.createElement('span');
@@ -101,6 +101,62 @@
   if (btnBack) {
     btnBack.addEventListener('click', function () {
       goToStep('1');
+    });
+  }
+
+  var btnBackFromOw = document.getElementById('btn-back-from-ow');
+  if (btnBackFromOw) {
+    btnBackFromOw.addEventListener('click', function () {
+      goToStep('3');
+    });
+  }
+
+  // =====================================================
+  // Напоминалки (шаг 4) — ✏️ ТЕКСТЫ МОЖНО МЕНЯТЬ ЗДЕСЬ
+  // =====================================================
+  var REMINDERS = [
+    'Я горжусь тобой. Правда.',
+    'Мне нравится всё в тебе.',
+    'Я всегда рядом. Даже на расстоянии.',
+    'Помни - я люблю тебя! Очень-очень сильно.',
+    'Ты важна. Для меня - особенно.',
+    'Ты самая прекрасная, красивая, симпатичная, обворожаблная',
+    'Ты - самое яркое, милое, чудесное солнышко в моей жизни.',
+    'Я в тебя верю. Всегда.',
+    'Ты делаешь мою жизнь лучше. Спасибо.',
+    'Хочу обнять тебя прямо сейчас.',
+    'Очень скучаю по тебе.',
+    'Дорожу тобой и ценю.',
+    'Я очень рад и по настоящему счастлив, что ты есть у меня.',
+  ];
+
+  var reminderEl = document.getElementById('reminder-text');
+  var btnNext = document.getElementById('btn-reminder-next');
+  var reminderIdx = 0;
+
+  function showReminder(idx) {
+    if (!reminderEl) return;
+    reminderEl.classList.add('is-fading');
+    setTimeout(function () {
+      reminderEl.textContent = REMINDERS[idx % REMINDERS.length];
+      reminderEl.classList.remove('is-fading');
+    }, 280);
+  }
+
+  // Показываем первую при переходе на шаг 4
+  var origGoToStep = goToStep;
+  goToStep = function (nextStep) {
+    origGoToStep(nextStep);
+    if (nextStep === '4') {
+      reminderIdx = Math.floor(Math.random() * REMINDERS.length);
+      if (reminderEl) reminderEl.textContent = REMINDERS[reminderIdx];
+    }
+  };
+
+  if (btnNext) {
+    btnNext.addEventListener('click', function () {
+      reminderIdx = (reminderIdx + 1) % REMINDERS.length;
+      showReminder(reminderIdx);
     });
   }
 
@@ -160,8 +216,8 @@
   // Рисуем символы на фоне (сердечки или цветочки — зависит от темы)
   var container = document.querySelector('.hearts');
   if (container) {
-    var symbols = (activeTheme && activeTheme.floatSymbols) ? activeTheme.floatSymbols : ['♥'];
-    var count = (activeTheme && activeTheme.floatCount) ? activeTheme.floatCount : 28;
+    var symbols = (activeTheme && activeTheme.floatSymbols) ? activeTheme.floatSymbols : ['🌿', '🍃', '🌱', '🌼', '☀️', '🦋'];
+    var count = (activeTheme && activeTheme.floatCount) ? activeTheme.floatCount : 32;
     for (var i = 0; i < count; i++) {
       var heart = document.createElement('span');
       heart.className = 'heart-float';

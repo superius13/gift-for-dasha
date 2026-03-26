@@ -4,8 +4,8 @@
   "description": "Письмо для тебя",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fdf8f3",
-  "theme_color": "#c97b84",
+  "background_color": "#f2fbf4",
+  "theme_color": "#5aab5a",
   "icons": [
     {
       "src": "favicon.svg",

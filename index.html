@@ -7,7 +7,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="favicon.svg">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#c97b84">
+  <meta name="theme-color" content="#5aab5a">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@
 
         <section class="message">
           <p>
-            Я сделал для тебя эту страничку — маленький подарок, который всегда будет в интернете.
+            Я сделал для тебя эту страничку - маленький подарок, который всегда будет в интернете.
           </p>
           <p>
             Ты делаешь каждый мой день теплее. Спасибо, что ты есть.
@@ -76,10 +76,26 @@
         </footer>
       </div>
     </div>
-      <p class="letter-back-wrap">
+      <div class="letter-actions">
+        <button type="button" class="btn-open-when" data-next="4">и ещё кое-что →</button>
         <button type="button" class="btn-back" id="btn-back-to-envelope">Свернуть в конверт</button>
-      </p>
+      </div>
     </div>
+
+    <!-- Шаг 4: Напоминалки -->
+    <div class="step step-4" data-step="4">
+      <div class="reminders-page">
+
+        <div class="reminder-card">
+          <p class="reminder-text" id="reminder-text"></p>
+        </div>
+
+        <button type="button" class="btn-reminder-next" id="btn-reminder-next">ещё →</button>
+
+        <button type="button" class="btn-back" id="btn-back-from-ow">← к письму</button>
+      </div>
+    </div>
+
   </main>
 
   <script src="script.js"></script>
