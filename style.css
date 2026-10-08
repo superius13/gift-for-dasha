@@ -800,16 +800,17 @@ body.theme-march8 {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: gold-shimmer 7s ease-in-out infinite;
+  animation: title-shimmer 7s ease-in-out infinite;
 }
 
-@keyframes gold-shimmer {
+@keyframes title-shimmer {
   0%, 100% { background-position: 100% 0; }
   50%      { background-position: 0% 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .theme-autumn .letter-header h1 { animation: none; }
+  .theme-autumn .letter-header h1,
+  .theme-winter .letter-header h1 { animation: none; }
 }
 
 /* Листики по углам письма, грибочек и каштан внизу (тоже золотые — фильтр выше) */
@@ -837,6 +838,114 @@ body.theme-march8 {
 
 .theme-autumn .letter::before { content: '🍄'; left: 0; }
 .theme-autumn .letter::after  { content: '🌰'; right: 0; }
+
+/* =====================================================
+   ТЕМА: ЗИМА (декабрь–февраль, активируется автоматически через JS)
+   ===================================================== */
+
+.theme-winter {
+  --cream: #f4f8fc;
+  --paper: #fbfdff;
+  --paper-envelope: #e1ecf8;
+  --ink: #1d2c40;
+  --ink-soft: #4a5d76;
+  --accent: #3f6fa8;
+  --accent-light: #c6dbf1;
+  --shadow: rgba(29, 44, 64, 0.08);
+  --shadow-strong: rgba(29, 44, 64, 0.13);
+  --envelope-border: rgba(29, 44, 64, 0.15);
+}
+
+/* Фон: морозное небо сверху, холодная дымка по углам */
+.theme-winter body {
+  background-image:
+    radial-gradient(ellipse 120% 70% at 50% 0%, #d5e5f7 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 10% 100%, rgba(110, 150, 210, 0.16) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 95% 85%, rgba(170, 160, 220, 0.14) 0%, transparent 50%);
+}
+
+/* Снежинки — текстовые символы, их цвет задаём сами */
+.theme-winter .heart-float,
+.theme-winter .confetti-petal {
+  color: #7fa5d4;
+}
+
+.theme-winter .heart-float.is-falling {
+  opacity: 0.7;
+}
+
+/* Конверт на шаге 1 — морозный, снежинка вместо печати */
+.theme-winter .closed-envelope {
+  filter: drop-shadow(0 8px 24px rgba(29, 44, 64, 0.18));
+}
+
+.theme-winter .closed-envelope-body {
+  background: linear-gradient(160deg, #f3f8fd 0%, var(--paper-envelope) 50%, #c9dcf0 100%);
+}
+
+.theme-winter .closed-envelope-flap {
+  border-top-color: #c9dcf0;
+  filter: drop-shadow(0 3px 10px rgba(29, 44, 64, 0.16));
+}
+
+.theme-winter .closed-envelope-flap::before {
+  content: '❆';
+  text-shadow: 0 1px 2px rgba(63, 111, 168, 0.35);
+}
+
+.theme-winter .closed-envelope::before,
+.theme-winter .closed-envelope::after {
+  content: '❅';
+  color: var(--accent);
+}
+
+/* Кнопка — зимняя синяя */
+.theme-winter .btn-next {
+  background: linear-gradient(135deg, #4a7fc1 0%, #2f5d96 100%);
+}
+
+/* Письмо и карточка напоминалок: тонкая морозная рамка внутри */
+.theme-winter .envelope,
+.theme-winter .reminder-card {
+  outline: 1px solid rgba(110, 150, 205, 0.45);
+  outline-offset: -10px;
+}
+
+/* Заголовок письма — ледяной, с медленным бликом */
+.theme-winter .letter-header h1 {
+  background: linear-gradient(100deg, #1f3556 0%, #3b5f8f 40%, #6a8fbf 50%, #3b5f8f 60%, #1f3556 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: title-shimmer 7s ease-in-out infinite;
+}
+
+/* Снежинки по углам письма, снеговик и шарф внизу */
+.theme-winter .envelope::before,
+.theme-winter .envelope::after {
+  position: absolute;
+  top: 1rem;
+  font-size: 1.3rem;
+  color: var(--accent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.theme-winter .envelope::before { content: '❅'; left: 1rem; }
+.theme-winter .envelope::after  { content: '❆'; right: 1rem; }
+
+.theme-winter .letter::before,
+.theme-winter .letter::after {
+  position: absolute;
+  bottom: 0;
+  font-size: 1.1rem;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.theme-winter .letter::before { content: '⛄'; left: 0; }
+.theme-winter .letter::after  { content: '🧣'; right: 0; }
 
 /* Конфетти */
 .confetti-petal {

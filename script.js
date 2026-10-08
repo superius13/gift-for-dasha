@@ -65,14 +65,38 @@
       apply: function () {
         document.documentElement.classList.add('theme-autumn');
       }
+    },
+
+    winter: {
+      // Активна с декабря по февраль
+      isActive: function () {
+        var m = new Date().getMonth() + 1;
+        return m === 12 || m <= 2;
+      },
+      // Текстовые снежинки (не эмодзи), чтобы цвет задавался из CSS
+      floatSymbols: ['❅', '❆', '❅', '❆', '•', '•'],
+      floatCount: 40,
+      falling: true,
+      themeColor: '#3f6fa8',
+      // Добавляются к основным напоминалкам (пока пусто)
+      reminders: [],
+      apply: function () {
+        document.documentElement.classList.add('theme-winter');
+      }
     }
   };
 
-  // Применяем активную тему (если есть)
+  // Применяем активную тему (если есть).
+  // Для предпросмотра можно открыть ?theme=winter (или autumn, march8, spring) — тема включится независимо от даты
   var activeTheme = null;
-  Object.keys(THEMES).forEach(function (key) {
-    if (THEMES[key].isActive()) activeTheme = THEMES[key];
-  });
+  var params = new URLSearchParams(location.search);
+  if (params.has('theme')) {
+    activeTheme = THEMES[params.get('theme')] || null;
+  } else {
+    Object.keys(THEMES).forEach(function (key) {
+      if (THEMES[key].isActive()) activeTheme = THEMES[key];
+    });
+  }
   if (activeTheme) {
     activeTheme.apply();
     var themeColorMeta = document.querySelector('meta[name="theme-color"]');
