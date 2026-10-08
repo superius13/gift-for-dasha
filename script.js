@@ -15,6 +15,7 @@
       },
       floatSymbols: ['🌸', '🌷', '🌼', '🌺', '✿'],
       floatCount: 50,
+      themeColor: '#9c6dc5',
       apply: function () {
         document.documentElement.classList.add('theme-march8');
         var step1Text = document.querySelector('.step-1-text');
@@ -41,6 +42,29 @@
         var easter = document.getElementById('heart-easter-popup');
         if (easter) easter.textContent = 'С 8 марта, родная 🌸';
       }
+    },
+
+    autumn: {
+      // Активна с сентября по ноябрь
+      isActive: function () {
+        var m = new Date().getMonth() + 1;
+        return m >= 9 && m <= 11;
+      },
+      floatSymbols: ['🍁', '🍂', '🍁', '🍂', '🍂', '🍃', '✨'],
+      floatCount: 28,
+      falling: true,
+      themeColor: '#d4a02e',
+      // Добавляются к основным напоминалкам
+      reminders: [
+        'Одевайся потеплее!',
+        'Замёрзнешь - представь, что я тебя обнимаю. Очень крепко!',
+        'Листья падают, а я люблю тебя всё сильнее.',
+        'Моя любовь греет тебя даже издалека.',
+        'Осень - просто ещё один сезон, в котором я думаю о тебе.',
+      ],
+      apply: function () {
+        document.documentElement.classList.add('theme-autumn');
+      }
     }
   };
 
@@ -49,7 +73,11 @@
   Object.keys(THEMES).forEach(function (key) {
     if (THEMES[key].isActive()) activeTheme = THEMES[key];
   });
-  if (activeTheme) activeTheme.apply();
+  if (activeTheme) {
+    activeTheme.apply();
+    var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta && activeTheme.themeColor) themeColorMeta.setAttribute('content', activeTheme.themeColor);
+  }
 
   // =====================================================
   // Переключение шагов (кнопка «Хочу посмотреть» и гифка «Да»)
@@ -133,6 +161,8 @@
     'Я очень рад и по настоящему счастлив, что ты есть у меня.',
   ];
 
+  if (activeTheme && activeTheme.reminders) REMINDERS = REMINDERS.concat(activeTheme.reminders);
+
   var reminderEl = document.getElementById('reminder-text');
   var btnNext = document.getElementById('btn-reminder-next');
   var reminderIdx = 0;
@@ -212,18 +242,30 @@
     });
   }
 
-  // Рисуем символы на фоне (сердечки или цветочки — зависит от темы)
+  // Рисуем символы на фоне (листики, цветочки — зависит от темы)
   var container = document.querySelector('.hearts');
   if (container) {
     var symbols = (activeTheme && activeTheme.floatSymbols) ? activeTheme.floatSymbols : ['🌿', '🍃', '🌱', '🌼', '☀️', '🦋'];
     var count = (activeTheme && activeTheme.floatCount) ? activeTheme.floatCount : 32;
+    // Тема может попросить, чтобы символы падали сверху (листья, снег) — если в системе не отключены анимации
+    var falling = activeTheme && activeTheme.falling &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     for (var i = 0; i < count; i++) {
       var heart = document.createElement('span');
       heart.className = 'heart-float';
       heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       heart.style.left = Math.random() * 100 + '%';
-      heart.style.top = Math.random() * 100 + '%';
-      heart.style.animationDelay = (Math.random() * 5) + 's';
+      if (falling) {
+        // Отрицательная задержка — чтобы сразу были по всему экрану, а не стартовали разом сверху
+        var fallTime = 14 + Math.random() * 10;
+        var swayTime = 2.5 + Math.random() * 2;
+        heart.classList.add('is-falling');
+        heart.style.animationDuration = fallTime + 's, ' + swayTime + 's';
+        heart.style.animationDelay = -(Math.random() * fallTime) + 's, ' + -(Math.random() * swayTime) + 's';
+      } else {
+        heart.style.top = Math.random() * 100 + '%';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+      }
       heart.style.fontSize = (0.65 + Math.random() * 0.5) + 'rem';
       container.appendChild(heart);
     }

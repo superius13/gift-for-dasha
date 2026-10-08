@@ -45,6 +45,7 @@ body {
 .hearts {
   position: fixed;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
   z-index: 0;
 }
@@ -60,6 +61,27 @@ body {
 @keyframes float {
   0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
   50% { transform: translateY(-15px) scale(1.05); opacity: 0.35; }
+}
+
+/* Падающие символы (листья, снег) — включаются флагом темы falling.
+   Длительность и задержку обеих анимаций задаёт JS */
+.heart-float.is-falling {
+  top: -2rem;
+  opacity: 0.5;
+  animation-name: fall, sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: normal, alternate;
+}
+
+@keyframes fall {
+  from { translate: 0 0; }
+  to   { translate: 0 calc(100vh + 4rem); }
+}
+
+@keyframes sway {
+  from { transform: translateX(-14px) rotate(-25deg); }
+  to   { transform: translateX(14px) rotate(25deg); }
 }
 
 /* Шаги */
@@ -178,13 +200,13 @@ body {
   border-radius: 999px;
   padding: 0.75rem 2rem;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(90, 171, 90, 0.35);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 35%, transparent);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-next:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(90, 171, 90, 0.45);
+  box-shadow: 0 6px 24px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .btn-next:active {
@@ -677,6 +699,144 @@ body.theme-march8 {
 
 .theme-march8 .letter::before { left: 0; }
 .theme-march8 .letter::after  { right: 0; }
+
+/* =====================================================
+   ТЕМА: ЗОЛОТАЯ ОСЕНЬ (сентябрь–ноябрь, активируется автоматически через JS)
+   ===================================================== */
+
+.theme-autumn {
+  --cream: #fcf6e4;
+  --paper: #fffaee;
+  --paper-envelope: #f6e3ae;
+  --ink: #3a2a12;
+  --ink-soft: #6b5228;
+  --accent: #a06c0a;
+  --accent-light: #f2d27a;
+  --shadow: rgba(58, 42, 18, 0.08);
+  --shadow-strong: rgba(58, 42, 18, 0.13);
+  --envelope-border: rgba(58, 42, 18, 0.15);
+}
+
+/* Фон: золотое солнце сверху, янтарь и мёд по углам */
+.theme-autumn body {
+  background-image:
+    radial-gradient(ellipse 120% 70% at 50% 0%, #f8d987 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 10% 100%, rgba(214, 140, 30, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 95% 85%, rgba(240, 190, 50, 0.24) 0%, transparent 50%);
+}
+
+/* Все листья золотые: sepia даёт одинаковый тон на любом устройстве
+   (эмодзи на iPhone и Windows разного цвета), сдвиг оттенка — от светлого золота до меди */
+.theme-autumn .heart-float,
+.theme-autumn .confetti-petal,
+.theme-autumn .closed-envelope::before,
+.theme-autumn .closed-envelope::after,
+.theme-autumn .closed-envelope-flap::before,
+.theme-autumn .envelope::before,
+.theme-autumn .envelope::after,
+.theme-autumn .letter::before,
+.theme-autumn .letter::after {
+  filter: sepia(1) saturate(3.4) hue-rotate(-4deg);
+}
+
+.theme-autumn .heart-float:nth-child(3n),
+.theme-autumn .confetti-petal:nth-child(3n) {
+  filter: sepia(1) saturate(3) hue-rotate(6deg) brightness(1.08);
+}
+
+.theme-autumn .heart-float:nth-child(3n+1),
+.theme-autumn .confetti-petal:nth-child(3n+1) {
+  filter: sepia(1) saturate(4) hue-rotate(-16deg) brightness(0.92);
+}
+
+.theme-autumn .heart-float.is-falling {
+  opacity: 0.65;
+}
+
+/* Конверт на шаге 1 — медовая бумага и золотой кленовый лист вместо печати */
+.theme-autumn .closed-envelope {
+  filter: drop-shadow(0 8px 24px rgba(160, 108, 10, 0.25));
+}
+
+.theme-autumn .closed-envelope-body {
+  background: linear-gradient(160deg, #fdf1cf 0%, var(--paper-envelope) 50%, #ecc970 100%);
+}
+
+.theme-autumn .closed-envelope-flap {
+  border-top-color: #ecc970;
+  filter: drop-shadow(0 3px 10px rgba(58, 42, 18, 0.18));
+}
+
+.theme-autumn .closed-envelope-flap::before {
+  content: '🍁';
+  text-shadow: none;
+}
+
+.theme-autumn .closed-envelope::before { content: '🍂'; }
+.theme-autumn .closed-envelope::after  { content: '🍁'; }
+
+/* Золотая кнопка — с тёмным текстом, чтобы читалось */
+.theme-autumn .btn-next {
+  color: var(--ink);
+  background: linear-gradient(135deg, #f3c95a 0%, #dc9d22 100%);
+  box-shadow: 0 4px 20px rgba(220, 157, 34, 0.4);
+}
+
+.theme-autumn .btn-next:hover {
+  box-shadow: 0 6px 26px rgba(220, 157, 34, 0.55);
+}
+
+/* Письмо и карточка напоминалок: тонкая золотая рамка внутри */
+.theme-autumn .envelope,
+.theme-autumn .reminder-card {
+  outline: 1px solid rgba(201, 150, 40, 0.45);
+  outline-offset: -10px;
+}
+
+/* Заголовок письма — золотое тиснение с медленным бликом */
+.theme-autumn .letter-header h1 {
+  background: linear-gradient(100deg, #7a4f05 0%, #a87a1e 40%, #c99a35 50%, #a87a1e 60%, #7a4f05 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-shimmer 7s ease-in-out infinite;
+}
+
+@keyframes gold-shimmer {
+  0%, 100% { background-position: 100% 0; }
+  50%      { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-autumn .letter-header h1 { animation: none; }
+}
+
+/* Листики по углам письма, грибочек и каштан внизу (тоже золотые — фильтр выше) */
+.theme-autumn .envelope::before,
+.theme-autumn .envelope::after {
+  content: '🍂';
+  position: absolute;
+  top: 1rem;
+  font-size: 1.3rem;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.theme-autumn .envelope::before { left: 1rem; }
+.theme-autumn .envelope::after  { right: 1rem; transform: scaleX(-1); }
+
+.theme-autumn .letter::before,
+.theme-autumn .letter::after {
+  position: absolute;
+  bottom: 0;
+  font-size: 1.1rem;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.theme-autumn .letter::before { content: '🍄'; left: 0; }
+.theme-autumn .letter::after  { content: '🌰'; right: 0; }
 
 /* Конфетти */
 .confetti-petal {
