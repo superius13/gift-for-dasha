@@ -6,7 +6,7 @@
   // =====================================================
   var THEMES = {
     march8: {
-      // Активна с 6 по 10 марта
+      // Активна с 8 по 10 марта
       isActive: function () {
         var now = new Date();
         var m = now.getMonth() + 1;
@@ -37,7 +37,7 @@
         var sig = document.querySelector('.signature');
         if (sig) sig.textContent = 'Целую. С любовью, твой Женя 🌷';
         var sigDate = document.querySelector('.signature-date');
-        if (sigDate) sigDate.textContent = '8 марта 2026';
+        if (sigDate) sigDate.textContent = '8 марта ' + new Date().getFullYear();
         var easter = document.getElementById('heart-easter-popup');
         if (easter) easter.textContent = 'С 8 марта, родная 🌸';
       }
@@ -60,9 +60,11 @@
     var current = document.querySelector('.step.is-visible');
     var next = document.querySelector('.step[data-step="' + nextStep + '"]');
     if (current && next) {
+      var prevStep = current.getAttribute('data-step');
       current.classList.remove('is-visible');
       next.classList.add('is-visible');
-      if (nextStep === '3') {
+      // Открытием считаем только переход «Да» → письмо, а не возврат с напоминалок
+      if (nextStep === '3' && prevStep === '2') {
         var n = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10) + 1;
         localStorage.setItem(STORAGE_KEY, String(n));
         var el = document.getElementById('letter-opens');
@@ -72,6 +74,7 @@
         }
         launchConfetti();
       }
+      if (nextStep === '4') startReminders();
     }
   }
 
@@ -143,15 +146,11 @@
     }, 280);
   }
 
-  // Показываем первую при переходе на шаг 4
-  var origGoToStep = goToStep;
-  goToStep = function (nextStep) {
-    origGoToStep(nextStep);
-    if (nextStep === '4') {
-      reminderIdx = Math.floor(Math.random() * REMINDERS.length);
-      if (reminderEl) reminderEl.textContent = REMINDERS[reminderIdx];
-    }
-  };
+  // Показываем случайную первую при переходе на шаг 4
+  function startReminders() {
+    reminderIdx = Math.floor(Math.random() * REMINDERS.length);
+    if (reminderEl) reminderEl.textContent = REMINDERS[reminderIdx];
+  }
 
   if (btnNext) {
     btnNext.addEventListener('click', function () {
@@ -191,7 +190,7 @@
     }
   }
 
-  // Пасхалка: двойной клик или долгое нажатие по сердечку в письме
+  // Пасхалка: клик по сердечку в письме
   var letterHeart = document.getElementById('letter-heart');
   var easterPopup = document.getElementById('heart-easter-popup');
   if (letterHeart && easterPopup) {
@@ -230,16 +229,4 @@
     }
   }
 
-  // Если есть photo.png — показываем его
-  var placeholder = document.querySelector('.photo-placeholder');
-  if (placeholder) {
-    var img = new Image();
-    img.onload = function () {
-      placeholder.classList.add('has-photo');
-      placeholder.innerHTML = '';
-      placeholder.appendChild(img);
-    };
-    img.alt = 'Love is...';
-    img.src = 'photo.png';
-  }
 })();
